@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Changing Stopwatch</title>
+    <style>
+        body {
+            transition: background-color 1s; /* Smooth transition for background color */
+        }
+        .stopwatch {
+            text-align: center;
+            margin-top: 20%;
+        }
+        h1 {
+            font-size: 48px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch">
+        <h1 id="display">00:00:00</h1>
+        <div class="buttons">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+    <script>
+        let seconds = 0;
+        let interval;
+
+        const display = document.getElementById('display');
+        const startButton = document.getElementById('start');
+        const stopButton = document.getElementById('stop');
+        const resetButton = document.getElementById('reset');
+        const body = document.body;
+
+        function updateDisplay() {
+            const formattedSeconds = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
+            const formattedMinutes = Math.floor(seconds / 60) % 60 < 10 ? '0' + Math.floor(seconds / 60) % 60 : Math.floor(seconds / 60) % 60;
+            const formattedHours = Math.floor(seconds / 3600) < 10 ? '0' + Math.floor(seconds / 3600) : Math.floor(seconds / 3600);
+            display.innerHTML = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function changeBackgroundColor() {
+            // Generate a random color
+            const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            body.style.backgroundColor = randomColor; // Set the new background color
+        }
+
+        startButton.addEventListener('click', () => {
+            clearInterval(interval);
+            interval = setInterval(() => {
+                seconds++;
+                updateDisplay();
+                changeBackgroundColor(); // Change background color every second
+            }, 1000);
+        });
+
+        stopButton.addEventListener('click', () => {
+            clearInterval(interval);
+        });
+
+        resetButton.addEventListener('click', () => {
+            clearInterval(interval);
+            seconds = 0;
+            updateDisplay();
+            body.style.backgroundColor = ''; // Reset background color
+        });
+    </script>
+</body>
+</html>
